@@ -36,10 +36,37 @@ async function displayWorks() {
     /* Suppression du block gallery */
     gallery.innerHTML = "";
 
-    /* Pour chaque work dans le tableau, j'appel la fonction qui corresspond */
+    /* Pour chaque work dans le tableau, j'appel la fonction qui correspond */
     works.forEach((work) => {
         createWorks(work);
     });
 }
 /* Appel de la fonction pour afficher les images */
 displayWorks();
+
+/* Fonction pour créer les différents works */
+function createWorks(work) {
+    /* Crée un élément <figure> pour chaque works */
+    const figure = document.createElement("figure");
+
+    /* Crée un élément <img> pour afficher l'image */
+    const img = document.createElement("img");
+
+    /* Crée un élément <figcaption> pour afficher la caption */
+    const figcaption = document.createElement("figcaption");
+
+    /* Définit l'attribut src de l'élément img avec l'URL de l'image de l'œuvre */
+    img.src = work.imageUrl;
+
+    /* Définit le contenu textuel de l'élément "figcaption" avec le titre de l'œuvre */
+    figcaption.textContent = work.title;
+
+    /* Ajoute l'élément img comme enfant de l'élément figure */
+    figure.appendChild(img);
+
+    /* Ajoute l'élément figcaption comme enfant de l'élément figure */
+    figure.appendChild(figcaption);
+
+    /* Ajoute l'élément figure comme enfant de l'élément avec la classe "gallery" */
+    gallery.appendChild(figure);
+}
