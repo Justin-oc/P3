@@ -97,6 +97,7 @@ nav li {
 
 li:hover {
 	color: #B1663C;
+	cursor: pointer;
 }
 #introduction {
 	display: flex;
@@ -125,6 +126,32 @@ li:hover {
 	text-align: center;
 	margin-bottom: 1em;
 }
+
+.container-filters {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 15px;
+	height: 100px;
+}
+
+.container-filters button {
+	background-color: #fefef8;
+	padding: 9px 20px;
+	border: 1px solid #1d6154;
+	border-radius: 25px;
+	color: #1d6154;
+	font-weight: 700;
+	font-size: 19px;
+	font-family: Syne;
+	cursor: pointer;
+}
+
+.container-filters button:focus {
+	background-color: #1d6154;
+	color: white;
+}
+
 .gallery {
 	width: 100%;
 	display: grid;
