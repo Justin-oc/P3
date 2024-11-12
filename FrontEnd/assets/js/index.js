@@ -2,9 +2,22 @@ if (!window.fetch) {
     alert("Your browser does not support fetch API");
 }
 
+/* Objet data pour stocker les works et les catégories de manière globale */
+const data = {
+    works: [],
+    categories: []
+};
+
 /* Éléments du DOM pour la galerie et les boutons de catégories */
-const gallery = document.querySelector(".gallery");
 const filters = document.querySelector(".container-filters");
+
+window.addEventListener("DOMContentLoaded", async () => {
+    data.works = await getWorks();
+    // data.categories = await getCategories();
+
+    /* Appel de la fonction pour afficher les images */
+    displayWorks();
+});
 
 /* Fonction asynchrone pour récupérer les images de la gallerie via le backend */
 async function getWorks() {
@@ -29,23 +42,21 @@ async function getWorks() {
 }
 
 /* Fonction asynchrone pour afficher les œuvres (works) */
-async function displayWorks() {
-    /* Récupération des images via l'API */
-    const works = await getWorks();
+async function displayWorks(works = data.works) {
+    const gallery = document.querySelector(".gallery");
 
     /* Suppression du block gallery */
     gallery.innerHTML = "";
 
     /* Pour chaque work dans le tableau, j'appel la fonction qui correspond */
     works.forEach((work) => {
-        createWorks(work);
+        const figure = createWork(work);
+        gallery.appendChild(figure);
     });
 }
-/* Appel de la fonction pour afficher les images */
-displayWorks();
 
 /* Fonction pour créer les différents works */
-function createWorks(work) {
+function createWork(work) {
     /* Crée un élément <figure> pour chaque works */
     const figure = document.createElement("figure");
 
@@ -68,5 +79,18 @@ function createWorks(work) {
     figure.appendChild(figcaption);
 
     /* Ajoute l'élément figure comme enfant de l'élément avec la classe "gallery" */
-    gallery.appendChild(figure);
+    return figure;
+}
+
+async function getCategories() {
+    try {
+        const response = await fetch("http://localhost:5678/api/categories");
+        if (!response.ok) {
+            throw new Error("Erreur de récupération des catégories via l'API.");
+        }
+        return await response.json();
+    } catch (error) {
+        console.error(error.message);
+        return [];
+    }
 }
