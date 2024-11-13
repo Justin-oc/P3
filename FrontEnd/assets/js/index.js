@@ -97,6 +97,7 @@ async function getCategories() {
         return [];
     }
 }
+
 function displayCategories() {
     const filtersContainer = document.querySelector(".container-filters");
 
@@ -107,6 +108,17 @@ function displayCategories() {
         button.dataset.categoryId = category.id;
         button.classList.add("filter-button");
 
+    // Associe un événement click sur chaque bouton pour filtrer les works
+    button.addEventListener("click", () => {
+        filterWorksByCategory(category.id);
+    });
+
         filtersContainer.appendChild(button);
     });
+}
+// fonction pour afficher les oeuvres en fonction des catégories
+function filterWorksByCategory(categoryId) {
+    // Filtre les œuvres en fonction de l'ID de la catégorie
+    const filteredWorks = data.works.filter(work => work.categoryId === categoryId);
+    displayWorks(filteredWorks);  // Affiche uniquement les œuvres filtrées
 }
