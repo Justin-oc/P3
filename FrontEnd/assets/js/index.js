@@ -113,6 +113,13 @@ function displayCategories() {
         filterWorksByCategory(category.id);
     });
 
+      //  Activation du bouton "Tous" pour afficher toutes les œuvres
+      const allButton = document.querySelector("button");
+  
+      allButton.addEventListener("click", () => {
+          displayWorks(data.works);  // Affiche toutes les œuvres
+      });
+
         filtersContainer.appendChild(button);
     });
 }
