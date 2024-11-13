@@ -13,10 +13,13 @@ const filters = document.querySelector(".container-filters");
 
 window.addEventListener("DOMContentLoaded", async () => {
     data.works = await getWorks();
+    data.categories = await getCategories();
     // data.categories = await getCategories();
 
     /* Appel de la fonction pour afficher les images */
     displayWorks();
+    // Appel de la fonction pour ajouter les categories
+    displayCategories();
 });
 
 /* Fonction asynchrone pour récupérer les images de la gallerie via le backend */
@@ -93,4 +96,17 @@ async function getCategories() {
         console.error(error.message);
         return [];
     }
+}
+function displayCategories() {
+    const filtersContainer = document.querySelector(".container-filters");
+
+    // Ajouter un bouton pour chaque catégorie
+    data.categories.forEach((category) => {
+        const button = document.createElement("button");
+        button.textContent = category.name;
+        button.dataset.categoryId = category.id;
+        button.classList.add("filter-button");
+
+        filtersContainer.appendChild(button);
+    });
 }
