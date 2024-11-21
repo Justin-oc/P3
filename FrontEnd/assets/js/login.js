@@ -63,7 +63,7 @@ loginForm.addEventListener("submit", (e) => {
          window.sessionStorage.setItem("loged", "true");
  
          // Redirection après connexion
-         window.location.href = "../index.html";
+         window.location.href = "index.html";
      })
      .catch((error) => {
          console.error("Une erreur s'est produite lors de la récupération des données", error);

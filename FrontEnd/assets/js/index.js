@@ -12,15 +12,46 @@ const data = {
 const filters = document.querySelector(".container-filters");
 
 window.addEventListener("DOMContentLoaded", async () => {
+    const token = getToken();
     data.works = await getWorks();
-    data.categories = await getCategories();
-    // data.categories = await getCategories();
-
     /* Appel de la fonction pour afficher les images */
     displayWorks();
-    // Appel de la fonction pour ajouter les categories
-    displayCategories();
+
+    data.categories = await getCategories();
+
+    if (!token) {
+        // Appel de la fonction pour ajouter les categories
+        displayCategories();
+    } else {
+        //Changement text login en logout
+        const logOutLink = document.querySelector(".logout");
+        logOutLink.innerText ="logout";
+        logOutLink.href = ""
+        //Ajout bouton modifier
+        const btnOpen = document.querySelector('.btnOpen')
+        btnOpen.classList.remove("hidden")
+        // @TODO : Afficher/modifier les éléments du DOM qui doivent être affichés/modifiés pour un utilisateur connecté.
+        // @TODO : Gérer la déconnexion de l'utilisateur
+        // @TODO : Gérer l'ouverture de la modale.
+        // @TODO : Gérer la fermeture de la modale.
+        // @TODO : Gérer l'affichage de la gallerie au sein de la modale et la suppression d'un work.
+    }
+
 });
+//Création de la fonction Logout
+const logOutLink = document.querySelector('.logout')
+
+logOutLink.addEventListener('click', logout);
+//Lancement de la fonction logout avec redirection sur l'index.HTML et suppresion du Token
+function logout (){
+    window.sessionStorage.removeItem('token')
+    location.reload("index.html");
+}
+
+function getToken() {
+    return window.sessionStorage.getItem("token");
+}
+
 
 /* Fonction asynchrone pour récupérer les images de la gallerie via le backend */
 async function getWorks() {
@@ -98,34 +129,38 @@ async function getCategories() {
     }
 }
 
-function displayCategories() {
+function displayCategories(categories = data.categories) {
     const filtersContainer = document.querySelector(".container-filters");
+    const all = { id: 0, name: "Tous" };
+    const button = createFilter(all);
+    filtersContainer.appendChild(button);
 
     // Ajouter un bouton pour chaque catégorie
-    data.categories.forEach((category) => {
-        const button = document.createElement("button");
-        button.textContent = category.name;
-        button.dataset.categoryId = category.id;
-        button.classList.add("filter-button");
+    categories.forEach((category) => {
+        const button = createFilter(category);
+        filtersContainer.appendChild(button);
+    });
+}
+
+function createFilter(category) {
+    const button = document.createElement("button");
+    button.textContent = category.name;
+    button.dataset.categoryId = category.id;
+    button.classList.add("filter-button");
 
     // Associe un événement click sur chaque bouton pour filtrer les works
     button.addEventListener("click", () => {
         filterWorksByCategory(category.id);
     });
 
-      //  Activation du bouton "Tous" pour afficher toutes les œuvres
-      const allButton = document.querySelector("button");
-  
-      allButton.addEventListener("click", () => {
-          displayWorks(data.works);  // Affiche toutes les œuvres
-      });
-
-        filtersContainer.appendChild(button);
-    });
+    return button;
 }
+
+
+
 // fonction pour afficher les oeuvres en fonction des catégories
 function filterWorksByCategory(categoryId) {
     // Filtre les œuvres en fonction de l'ID de la catégorie
-    const filteredWorks = data.works.filter(work => work.categoryId === categoryId);
+    const filteredWorks = categoryId ? data.works.filter(work => work.categoryId === categoryId) : data.works;
     displayWorks(filteredWorks);  // Affiche uniquement les œuvres filtrées
 }
