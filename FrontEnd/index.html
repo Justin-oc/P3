@@ -8,6 +8,7 @@
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Work+Sans&display=swap" rel="stylesheet">
 	<meta name="description" content="">
+	<script src="https://kit.fontawesome.com/d3f6a1c8dd.js" crossorigin="anonymous"></script>
 	<link rel="stylesheet" href="./assets/style.css">
 </head>
 <body>
@@ -34,10 +35,62 @@
 			<p>En cas de besoin, une équipe pluridisciplinaire peut-être constituée : architecte DPLG, décorateur(trice)</p>
 		</article>
 	</section>
-	<section id="portfolio">
-		<h2>Mes Projets</h2>
-		<button class="btnOpen hidden"><i class="fa-regular fa-pen-to-square"></i> Modifier</button>
 
+	<!------- Gestion de la modale -------->
+	<div class="modal-container hidden">
+		<button class="btnClose"><i class="fa-solid fa-xmark"></i></button>
+		<h3>Galerie photo</h3>
+		<div class="modalGallery">
+			<!------- Géré en JS dynamiquement -------->
+		</div>
+		<div class="btnAddModaleContainer">
+			<button class="btnAddmodale">Ajouter une photo</button>
+		</div>
+	</div>
+
+	<div class="addContentModal hidden">
+		<div class="exitModal">
+			<span class="arrowReturn"><i class="fa-solid fa-arrow-left"></i></span>
+			<button class="btnClose2"><i class="fa-solid fa-xmark"></i></button>
+		</div>
+		<h3>Ajout photo</h3>
+		<form id="formAddPic" method="post">
+			<div class="addPicContainer">
+				<img src="" class="imagePreview" alt="Uploaded Image">
+				<i class="fa-regular fa-image"></i>
+				<label for="fileInput" class="labelFileInput">+ Ajouter photo</label>
+				<input type="file"  id="fileInput" accept=".png, .jpg">
+				<p>jpg, png : 4mo max</p>
+			</div>
+
+			<div class="formLabel">
+				<label for="title">Titre</label>
+				<input type="text" name="name" id="title">
+			</div>
+
+			<div class="formLabel">
+				<label for="category">Catégorie</label>
+				<select name="name" id="category">
+					<!----- géré dynamiquement en JS ------->
+				</select>
+			</div>
+			
+			<div class="ValidateContainer">
+				<button class="btnValidatePic">Valider</button>
+			</div>
+
+		</form>
+	</div>
+
+		<div class="overlay hidden"></div><!----RAJOUTER CLASS HIDDEN UNE FOIS CSS OK-->
+
+	</div>
+
+	<section id="portfolio">
+		<div class="projet-modifier">
+			<h2>Mes Projets</h2>
+			<button class="btnOpen hidden"><i class="fa-regular fa-pen-to-square"></i> Modifier</button>
+		</div>
 		<div class="container-filters">
 		</div>
 		<div class="gallery">
@@ -69,6 +122,7 @@
 <!---===== JS =====-->
 
 <script src ="assets/js/index.js"></script>
+<script src="assets/js/modal.js"></script>
 
 
 </body>
