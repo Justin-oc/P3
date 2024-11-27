@@ -35,53 +35,52 @@
 			<p>En cas de besoin, une équipe pluridisciplinaire peut-être constituée : architecte DPLG, décorateur(trice)</p>
 		</article>
 	</section>
-
-	<!------- Gestion de la modale -------->
-	<div class="modal-container hidden">
-		<button class="btnClose"><i class="fa-solid fa-xmark"></i></button>
-		<h3>Galerie photo</h3>
-		<div class="modalGallery">
-			<!------- Géré en JS dynamiquement -------->
+	
+		<!------- Gestion de la modale -------->
+		<div class="modal-container hidden">
+			<button class="btnClose"><i class="fa-solid fa-xmark"></i></button>
+			<h3>Galerie photo</h3>
+			<div class="modalGallery">
+				<!------- Géré en JS dynamiquement -------->
+			</div>
+			<div class="btnAddModaleContainer">
+				<button class="btnAddmodale">Ajouter une photo</button>
+			</div>
 		</div>
-		<div class="btnAddModaleContainer">
-			<button class="btnAddmodale">Ajouter une photo</button>
+
+		<div class="addContentModal hidden">
+			<div class="exitModal">
+				<span class="arrowReturn"><i class="fa-solid fa-arrow-left"></i></span>
+				<button class="btnClose2"><i class="fa-solid fa-xmark"></i></button>
+			</div>
+			<h3>Ajout photo</h3>
+			<form id="formAddPic" method="post">
+				<div class="addPicContainer">
+					<img src="" class="imagePreview" alt="Uploaded Image">
+					<i class="fa-regular fa-image"></i>
+					<label for="fileInput" class="labelFileInput">+ Ajouter photo</label>
+					<input type="file"  id="fileInput" accept=".png, .jpg">
+					<p>jpg, png : 4mo max</p>
+				</div>
+
+				<div class="formLabel">
+					<label for="title">Titre</label>
+					<input type="text" name="name" id="title">
+				</div>
+
+				<div class="formLabel">
+					<label for="category">Catégorie</label>
+					<select name="name" id="category">
+						<!----- géré dynamiquement en JS ------->
+					</select>
+				</div>
+				
+				<div class="ValidateContainer">
+					<button class="btnValidatePic">Valider</button>
+				</div>
+
+			</form>
 		</div>
-	</div>
-
-	<div class="addContentModal hidden">
-		<div class="exitModal">
-			<span class="arrowReturn"><i class="fa-solid fa-arrow-left"></i></span>
-			<button class="btnClose2"><i class="fa-solid fa-xmark"></i></button>
-		</div>
-		<h3>Ajout photo</h3>
-		<form id="formAddPic" method="post">
-			<div class="addPicContainer">
-				<img src="" class="imagePreview" alt="Uploaded Image">
-				<i class="fa-regular fa-image"></i>
-				<label for="fileInput" class="labelFileInput">+ Ajouter photo</label>
-				<input type="file"  id="fileInput" accept=".png, .jpg">
-				<p>jpg, png : 4mo max</p>
-			</div>
-
-			<div class="formLabel">
-				<label for="title">Titre</label>
-				<input type="text" name="name" id="title">
-			</div>
-
-			<div class="formLabel">
-				<label for="category">Catégorie</label>
-				<select name="name" id="category">
-					<!----- géré dynamiquement en JS ------->
-				</select>
-			</div>
-			
-			<div class="ValidateContainer">
-				<button class="btnValidatePic">Valider</button>
-			</div>
-
-		</form>
-	</div>
-
 		<div class="overlay hidden"></div>
 
 	<section id="portfolio">

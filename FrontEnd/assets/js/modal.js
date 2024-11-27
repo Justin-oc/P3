@@ -17,16 +17,9 @@ const closeModal = function () {
 
 //Création fonction affichage des works dans la modale Ajout photo à destination du fichier script
 function generateWork() {
-    getWorks()
-    .then(data => {
-        // Vidage de l'affichage des projets
-        function resetGallery (){
-            modalGallery.innerHTML = ""
-        }
-
-        //Découpage du tableau "data" en "work" individuels
-        //Affichage de l'ensemble des "work" si bouton all, sinon affichage de la categoryID qui correspond au bouton
-        data.forEach(work => {
+    getWorks().then(data => {
+        
+      data.forEach(work => {
             const worksId = work.id
                 const modalGallery = document.querySelector('.modalGallery')
                 const figure = document.createElement('figure');
@@ -83,7 +76,7 @@ const returnModal1 = function () {
 
 //Fonction suppression travaux
 async function deleteWorks(event, worksId) {
-   let monToken = window.localStorage.getItem('token');
+   let monToken = sessionStorage.getItem('token');
     const deleteConfirmation = confirm("Souhaitez-vous vraiment supprimer ce projet ?")
     // Si confirmation :
     if (deleteConfirmation) {
@@ -97,19 +90,29 @@ async function deleteWorks(event, worksId) {
         );
         // Si suppresion ok
         if (deleteFetch.ok) {
-          document.querySelectorAll(`.figure-${worksId}`)
-          .forEach((figure) => figure.remove());
+          const figure = document.querySelector(`#work-${worksId}`);
+          if (figure) {
+             figure.remove();
+          }
+          refreshGallery()
           event.preventDefault();
-          alert("Projet supprimé !")
+          alert("Projet supprimé !");
           console.log("Travail supprimé");
-        } else {
-          console.error(
-            "Erreur lors de la suppression."
-          );
-        }
-      } catch (error) {
-        alert('Suppression impossible, une erreur est survenue')
-      }
+       } else {
+          console.error("Erreur lors de la suppression.");
+       }
+    } catch (error) {
+       alert('Suppression impossible, une erreur est survenue');
+    }
+ }
+}
+
+// Fonction pour rafraîchir la galerie après suppression
+function refreshGallery() {
+  const modalGallery = document.querySelector('.modalGallery');
+  if (modalGallery) {
+     modalGallery.innerHTML = ""; // Réinitialise la galerie
+     generateWork(); // Recharge les travaux depuis le serveur
   }
 }
 
@@ -155,52 +158,57 @@ function choosePhoto () {
 
 
 
-function postNewFile () {
-        const btnValidatePic = document.querySelector('.btnValidatePic')
-        const fileInput = document.getElementById('fileInput')
-        const titleInput = document.getElementById('title')
-        const categoryInput = document.getElementById('category');
-        let monToken = window.localStorage.getItem('token');
+function postNewFile() {
+  const btnValidatePic = document.querySelector('.btnValidatePic');
+  const fileInput = document.getElementById('fileInput');
+  const titleInput = document.getElementById('title');
+  const categoryInput = document.getElementById('category');
+  let monToken = sessionStorage.getItem('token');
 
-        //Ajout événement au click du bouton valider
-        btnValidatePic.addEventListener('click', async (event) => {
-          event.preventDefault();
-          if (fileInput.value === "" || titleInput.value.trim() === "" || categoryInput.value === "") {
-            alert("Il semblerait que certaines informations soient manquantes")
-          } else { 
-            const postConfirmation = confirm("Voulez-vous importer votre projet ?")
-          //Si le bouton "oui" est cliqué :
-          if(postConfirmation) {
-            const formData = new FormData ();
-              //Récupération de l'ID catégory
-              formData.append('category', categoryInput.value);
-              formData.append('image', fileInput.files[0]);
-              formData.append('title', titleInput.value);
-            const response = await fetch("http://localhost:5678/api/works", {
-              method: "POST",
-              headers: {
-                accept: "application/json",
-                Authorization: `Bearer ${monToken}`,
-                },
-              body: formData,
-            });
-              if (response.ok) {
-                alert("Projet ajouté !");
-                console.log(titleInput.value, " ajouté !")
-                const newWork = await response.json();
-                 // Remise à zero de la modale d'ajout de fichier
-                resetModal2();
-                //Retour modal1 pour vue gallery
-                returnModal1();
-                //Appel de la fonction d'ajout des nouveaux fichiers à la gallery modal
-                addNewWorkToModal(newWork);
-                //Appel de la fonction d'ajout des nouveaux fichiers à la gallery du site
-                addNeworkToIndex(newWork);
-              };
-            };
-          };
-        });
+  btnValidatePic.addEventListener('click', async (event) => {
+      event.preventDefault();
+
+      if (fileInput.value === "" || titleInput.value.trim() === "" || categoryInput.value === "") {
+          alert("Il semblerait que certaines informations soient manquantes");
+      } else {
+          const postConfirmation = confirm("Voulez-vous importer votre projet ?");
+          if (postConfirmation) {
+              // Création et remplissage de FormData pour envoyer les données du formulaire
+              const formData = new FormData();
+              formData.append('category', categoryInput.value); // Ajout de la catégorie
+              formData.append('image', fileInput.files[0]); // Ajout du fichier
+              formData.append('title', titleInput.value.trim()); // Ajout du titre avec un trim pour éliminer les espaces inutiles
+
+              try {
+                  const response = await fetch("http://localhost:5678/api/works", {
+                      method: "POST",
+                      headers: {
+                          accept: "application/json", // Pas besoin d'utiliser 'Content-Type' pour FormData, car il est géré automatiquement
+                          Authorization: `Bearer ${monToken}`,
+                      },
+                      body: formData,
+                  });
+
+                  if (response.ok) {
+                      alert("Projet ajouté !");
+                      const newWork = await response.json();
+
+                      // Remise à zéro des champs et retour à l'affichage
+                      resetModal2(); // Réinitialisation de la modale
+                      returnModal1(); // Retour à la première modale
+                      addNewWorkToModal(newWork); // Ajout à la galerie de la modale
+                      addNeworkToIndex(newWork); // Ajout à la galerie principale du site
+                  } else {
+                      console.error("Erreur lors de l'ajout du projet.");
+                  }
+              } catch (error) {
+                  alert("Une erreur est survenue lors de l'ajout du projet.");
+                  console.error(error);
+              }
+          }
       }
+  });
+}
 
 //Fonction permettant de vider la modale N°2 pour l'ajout de photo à la fermeture de la modale ou au retour de la modale gallery
 function resetModal2() {
@@ -229,6 +237,7 @@ function resetModal2() {
 
 //Fonction d'ajout du nouveau fichier a la gallery modale
 async function addNewWorkToModal (newWork) {
+        // @SUGGESTION : Il est possible d'utiliser la logique de la fonction generateWork pour éviter la répétition de code.
       const newWorkId = newWork.id
       const modalGallery = document.querySelector('.modalGallery')
       //Création balise <figure>
