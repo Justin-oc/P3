@@ -30,11 +30,6 @@ window.addEventListener("DOMContentLoaded", async () => {
         //Ajout bouton modifier
         const btnOpen = document.querySelector('.btnOpen')
         btnOpen.classList.remove("hidden")
-        // @TODO : Afficher/modifier les éléments du DOM qui doivent être affichés/modifiés pour un utilisateur connecté.
-        // @TODO : Gérer la déconnexion de l'utilisateur
-        // @TODO : Gérer l'ouverture de la modale.
-        // @TODO : Gérer la fermeture de la modale.
-        // @TODO : Gérer l'affichage de la gallerie au sein de la modale et la suppression d'un work.
     }
 
 });
