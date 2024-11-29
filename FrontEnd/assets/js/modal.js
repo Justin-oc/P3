@@ -237,7 +237,6 @@ function resetModal2() {
 
 //Fonction d'ajout du nouveau fichier a la gallery modale
 async function addNewWorkToModal (newWork) {
-        // @SUGGESTION : Il est possible d'utiliser la logique de la fonction generateWork pour éviter la répétition de code.
       const newWorkId = newWork.id
       const modalGallery = document.querySelector('.modalGallery')
       //Création balise <figure>
